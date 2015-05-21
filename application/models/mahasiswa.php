@@ -168,7 +168,7 @@ class Mahasiswa extends CI_Model{
 	
 		if($this->db->affected_rows() != 0){
 			return "ok";
-		}else return $mysqli->error;
+		}else return $this->db->error;
 	}
 	
 	/**
