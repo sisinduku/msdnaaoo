@@ -6,16 +6,22 @@
  *
  */
 class Admin extends CI_Model{
+		
+	private $idAdmin, $username, $password, $email, $lastLogin, $lastIp, $privilege;
+	
+	public function __construct(){
+		// Call the CI_Model constructor
+		parent::__construct();
+	}
 	
 	/**
 	 * Fungsi untuk mendapatkan baris admin berdasarkan idnya
 	 * @param int $idAdmin
 	 * @return row of array Admin
 	 */
-	function get_admin_by_id($idAdmin) {
+	function getAdminbyId($idAdmin) {
 	
-		$idAdmin_safe = intval($idAdmin);
-		$result = $this->db->get_where('tbl_admin', array('id'=>$idAdmin_safe), 1);
+		$result = $this->db->get_where('tbl_admin', array('idAdmin'=>$idAdmin), 1);
 	
 		$row = $result->row_array();
 		return $row;
@@ -26,10 +32,9 @@ class Admin extends CI_Model{
 	 * @param string $uName
 	 * @return row of array Admin
 	 */
-	function get_admin_by_username($uName) {
+	function getAdminbyUsername($username) {
 	
-		$uName_safe = $this->db->escape($uName);
-		$result = $this->db->get_where('tbl_admin', array('username'=>$uName_safe), 1);
+		$result = $this->db->get_where('tbl_admin', array('username'=>$username), 1);
 	
 		$row = $result->row_array();
 		return $row;
@@ -42,9 +47,13 @@ class Admin extends CI_Model{
 	 * @param string $newPassWord
 	 * @return string|NULL
 	 */
-	function admin_change_password($idAdmin, $oldPassWord, $newPassWord) {
-	
-		$adminData = get_admin_by_id($idAdmin);
+	function changePassword() {
+		
+		$this->idAdmin = $this->input->post('idAdmin');
+		$oldPassWord = $this->input->post('oldPassword');
+		$newPassWord = $this->input->post('newPassword');
+		
+		$adminData = $this->getAdminbyId($this->idAdmin);
 		if ($adminData == null) return "Admin ID not found!";
 	
 		// if password OK
@@ -55,7 +64,7 @@ class Admin extends CI_Model{
 			$salt = sprintf("$2a$%02d$", $cost) . $salt;
 			$passwordHash = crypt($newPassWord, $salt);
 			
-			$this->db->update('tbl_admin', array('password'=>$passwordHash),array('id'=>$adminData['id']));
+			$this->db->update('tbl_admin', array('password'=>$passwordHash),array('idAdmin'=>$adminData['id']));
 			
 			if ($this->db->affected_rows() === 0) return ("Query failed!");
 	
@@ -71,21 +80,24 @@ class Admin extends CI_Model{
 	 * @param boolean $updateRecord
 	 * @return NULL|string
 	 */
-	function admin_login($uName, $passLogin, $updateRecord = true) {
-		$adminData = get_admin_by_username($uName);
+	function adminLogin($uName, $passLogin, $updateRecord = true) {
+		
+		$this->username = $this->input->post('username');
+		$this->password = $this->input->post('password');
+		
+		$adminData = $this->getAdminbyUsername($this->username);
 		if ($adminData != null) {
 			// if password OK
-			if ((crypt($passLogin, $adminData['password'])) === $adminData['password']) {
-				$_SESSION['sessionType']		= $adminData['privilege'];
-				$_SESSION['sessionEmail']	= $adminData['email'];
-				$_SESSION['sdminName']	= $adminData['fullname'];
-				$_SESSION['id']	= $adminData['id'];
+			if ((crypt($this->password, $adminData['password'])) === $adminData['password']) {
+				$data = array('sessionType'=>$adminData['privilege'], 'sessionEmail'=>$adminData['email'],
+								'sdminName'=>$adminData['fullname'], 'id'=>$adminData['idAdmin']);
+				
+				$this->session->set_userdata($data);
 					
 				if ($updateRecord) {
-	
-					$tanggal		= date("Y-m-d H:i:s");
-					$clientIPaddr	= $_SERVER['REMOTE_ADDR'];
-					$this->db->update('tbl_admin', array('last_login'=>$tanggal, 'last_ip'=>$clientIPaddr), array('id'=>$adminData['id']));
+					$this->lastLogin = date("Y-m-d H:i:s");
+					$this->lastIp = $_SERVER['REMOTE_ADDR'];
+					$this->db->update('tbl_admin', array('lastLogin'=>$this->lastLogin, 'lastIp'=>$this->lastIp), array('id'=>$adminData['idAdmin']));
 				}
 				return null;
 			}
@@ -97,11 +109,11 @@ class Admin extends CI_Model{
 	 * Fungsi untuk admin melakukan logout. Fungsi ini akan mengakhiri sesi dari admin tersebut
 	 * 
 	 */
-	function admin_logout() {
+	function adminLogout() {
+		unset($_SESSION['id']);
 		unset($_SESSION['sessionType']);
 		unset($_SESSION['sessionEmail']);
 		unset($_SESSION['sdminName']);
-		session_destroy();
 	}
 }
 ?>

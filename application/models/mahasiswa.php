@@ -6,13 +6,20 @@
  *
  */
 class Mahasiswa extends CI_Model{
+
+	private $nim, $nama, $email, $linkKtm;
+	
+	public function __construct(){
+		// Call the CI_Model constructor
+		parent::__construct();
+	}
 	
 	/**
 	 * Fungsi untuk mendapatkan array of object mahasiswa
 	 * @param int $filter
 	 * @return array:Mahasiswa
 	 */
-	function get_data_mahasiswa($filter){
+	function getDataMahasiswa($filter){
 	
 		if ($filter != 1){
 			if ($filter == 2) {
@@ -52,7 +59,7 @@ class Mahasiswa extends CI_Model{
 	 * @param int $filter
 	 * @return array:Mahasiswa
 	 */
-	function get_data_mahasiswa_by_status($queryFilter = null, $filter) {
+	function getDataMahasiswabyStatus($queryFilter = null, $filter) {
 	
 		if($filter == 1){
 			if ($queryFilter == "confirmed") {
@@ -104,7 +111,7 @@ class Mahasiswa extends CI_Model{
 	 * @param int $filter
 	 * @return array:string,int
 	 */
-	function count_mahasiswa($filter = 1){
+	function countMahasiswa($filter = 1){
 	
 		if($filter == 1)
 			$query = "SELECT SUBSTR(`nim`,3,4) AS prodi, COUNT(`nim`) AS jumlah FROM tbl_mahasiswa GROUP BY SUBSTR(`nim`,3,4)";
@@ -129,7 +136,7 @@ class Mahasiswa extends CI_Model{
 	 * @param string $nim
 	 * @return Mahasiswa
 	 */
-	function get_mahasiswa_by_nim($nim){
+	function getMahasiswabyNim($nim){
 	
 		$result = $this->db->get_where('tbl_mahasiswa', array('nim'=>$nim), 1);
 	
@@ -145,9 +152,13 @@ class Mahasiswa extends CI_Model{
 	 * @param string $link_ktm
 	 * @return NULL|string
 	 */
-	function daftar_mahasiswa($nim, $nama, $email, $link_ktm) {
+	function daftarMahasiswa() {
+		$this->nim = $this->input->post('nim');
+		$this->nama = $this->input->post('nama');
+		$this->email = $this->input->post('email');
+		$this->linkKtm = $this->input->post('linkKtm');
 	
-		$query = $this->db->insert('tbl_mahasiswa', array('nim'=>$nim, 'nama'=>$nama, 'email'=>$email, 'link_ktm'=>$link_ktm));
+		$query = $this->db->insert('tbl_mahasiswa', array('nim'=>$this->nim, 'nama'=>$this->nama, 'email'=>$this->email, 'linkKtm'=>$this->linkKtm));
 		
 		if($this->db->affected_rows() != 0){
 			return null;
@@ -162,7 +173,7 @@ class Mahasiswa extends CI_Model{
 	 * @param string $nim
 	 * @return string
 	 */
-	function delete_mahasiswa($nim){
+	function deleteMahasiswa($nim){
 		
 		$this->db->delete('tbl_mahasiswa', array('nim'=>$nim, 'konfirmasi !='=>3));
 	
@@ -176,7 +187,7 @@ class Mahasiswa extends CI_Model{
 	 * @param string $nim
 	 * @return string|0
 	 */
-	function cek_nim($nim){
+	function cekNim($nim){
 	
 		$this->db->select('nim');
 		$result = $this->db->get_where('tbl_mahasiswa', array('nim'=>$nim), 1);
@@ -192,7 +203,7 @@ class Mahasiswa extends CI_Model{
 	 * @param string $nim
 	 * @return string
 	 */
-	function konfirmasi_mahasiswa($nim) {
+	function konfirmasiMahasiswa($nim) {
 	
 		$this->db->update('tbl_mahasiswa', array('konfirmasi'=>1), array('nim'=>$nim));
 	
@@ -206,7 +217,7 @@ class Mahasiswa extends CI_Model{
 	 * @param string $nim
 	 * @return string
 	 */
-	function daftarkan_mahasiswa($nim = NULL){
+	function daftarkanMahasiswa($nim = NULL){
 	
 		$date = date('Y-m-d', strtotime('+1 year'));
 		$date = trim($date);
