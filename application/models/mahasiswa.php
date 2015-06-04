@@ -135,7 +135,7 @@ class Mahasiswa extends CI_Model{
 		$this->nim = $this->input->post('nim');
 		$this->nama = $this->input->post('nama');
 		$this->email = $this->input->post('email');
-		$this->linkKtm = $this->input->post('linkKtm');
+		$this->linkKtm = $this->input->post('ktm');
 	
 		$query = $this->db->insert('tbl_mahasiswa', array('nim'=>$this->db->escape($this->nim), 'nama'=>$this->db->escape($this->nama), 'email'=>$this->db->escape($this->email), 'linkKtm'=>$this->db->escape($this->linkKtm)));
 		
