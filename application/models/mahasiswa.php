@@ -125,17 +125,14 @@ class Mahasiswa extends CI_Model{
 	
 	/**
 	 * Fungsi untuk menambahkan mahasiswa
-	 * @param string $nim
-	 * @param string $nama
-	 * @param string $email
 	 * @param string $link_ktm
 	 * @return NULL|string
 	 */
-	public function daftarMahasiswa() {
+	public function daftarMahasiswa($linkKtm) {
 		$this->nim = $this->input->post('nim');
 		$this->nama = $this->input->post('nama');
 		$this->email = $this->input->post('email');
-		$this->linkKtm = $this->input->post('ktm');
+		$this->linkKtm = $linkKtm;
 	
 		$query = $this->db->insert('tbl_mahasiswa', array('nim'=>$this->db->escape($this->nim), 'nama'=>$this->db->escape($this->nama), 'email'=>$this->db->escape($this->email), 'linkKtm'=>$this->db->escape($this->linkKtm)));
 		
