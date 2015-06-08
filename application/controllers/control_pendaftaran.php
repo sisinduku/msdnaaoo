@@ -12,14 +12,16 @@ class Control_pendaftaran extends CI_Controller{
 	 * Fungsi untuk 
 	 */
 	public function daftar_mahasiswa(){
+		
 		$this->load->library('upload');
 		
-		if(! $this->upload->do_upload() || $this->form_validation->run() == FALSE){
+		if(! $this->upload->do_upload('ktm') || $this->form_validation->run() == FALSE){
 			$data = array('error' => $this->upload->display_errors('<li>', '</li>'));
 			$data['pageTitle'] = "Form Pendafraran MSDNAA FSM";
 			$this->load->template("form_pendaftaran", $data);
 		}else{
-			$linkKtm = $this->upload->data('full_path');
+			$linkKtm = "/assets/uploads/";
+			$linkKtm .= $this->upload->data('file_name');
 			
 			$this->load->model("mahasiswa");
 			$this->mahasiswa->daftarMahasiswa($linkKtm);

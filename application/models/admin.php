@@ -7,7 +7,7 @@
  */
 class Admin extends CI_Model{
 		
-	private $idAdmin, $username, $password, $email, $lastLogin, $lastIp, $privilege;
+	private $idAdmin, $username, $password, $email, $fullname, $lastLogin, $lastIp, $privilege;
 	
 	public function __construct(){
 		// Call the CI_Model constructor
@@ -24,6 +24,7 @@ class Admin extends CI_Model{
 		$this->username = $this->input->post('username');
 		$this->password = $this->input->post('password');
 		$this->email = $this->input->post('email');
+		$this->fullname = $this->input->post('fullname');
 		$namaJurusan = $this->input->post('jurusan');
 		$jurusan = $this->jurusan->getJurusanbyName($namaJurusan);
 		$this->privilege = $jurusan['id'];
@@ -34,8 +35,8 @@ class Admin extends CI_Model{
 		$passwordHash = crypt($this->password, $salt);
 		
 		if($this->cekUsername($username) == 0){
-			$this->db->insert('tbl_admin', array('username'=>$this->db->escape($this->username), 'password'=>$this->db->escape($passwordHash),
-					'email'=>$this->db->escape($this->email),'$privilege'=>$this->privilege)
+			$this->db->insert('tbl_admin', array('username'=>$this->username, 'password'=>$passwordHash,
+					'email'=>$this->email,'$privilege'=>$this->privilege)
 			);
 			
 			if($this->db->affected_rows() != 0){
@@ -64,7 +65,7 @@ class Admin extends CI_Model{
 	 */
 	public function getAdminbyUsername($username) {
 	
-		$result = $this->db->get_where('tbl_admin', array('username'=>$this->db->escape($username)), 1);
+		$result = $this->db->get_where('tbl_admin', array('username'=>$username), 1);
 	
 		$row = $result->row_array();
 		return $row;
@@ -91,7 +92,7 @@ class Admin extends CI_Model{
 			$salt = sprintf("$2a$%02d$", $cost) . $salt;
 			$passwordHash = crypt($newPassWord, $salt);
 			
-			$this->db->update('tbl_admin', array('password'=>$this->db->escape($passwordHash)),array('idAdmin'=>$adminData['idAdmin']));
+			$this->db->update('tbl_admin', array('password'=>$passwordHash),array('idAdmin'=>$adminData['idAdmin']));
 			
 			if ($this->db->affected_rows() === 0) return ("Query failed!");
 	
@@ -113,7 +114,7 @@ class Admin extends CI_Model{
 		
 		// if password OK
 		if ((crypt($password, $adminData['password'])) === $adminData['password']) {
-			$this->db->update('tbl_admin', array('email'=>$this->db->escape($email)), array('idAdmin'=>$adminData['idAdmin']));
+			$this->db->update('tbl_admin', array('email'=>$email), array('idAdmin'=>$adminData['idAdmin']));
 			if ($this->db->affected_rows() === 0) return ("Query failed!");
 		}else return "Password tidak tepat.";
 		return null;
@@ -134,7 +135,7 @@ class Admin extends CI_Model{
 		$salt = sprintf("$2a$%02d$", $cost) . $salt;
 		$passwordHash = crypt($newPassword, $salt);
 			
-		$this->db->update('tbl_admin', array('password'=>$this->db->escape($passwordHash)),array('idAdmin'=>$adminData['idAdmin']));
+		$this->db->update('tbl_admin', array('password'=>$passwordHash),array('idAdmin'=>$adminData['idAdmin']));
 			
 		if ($this->db->affected_rows() === 0) return ("Query failed!");
 	}
@@ -147,7 +148,7 @@ class Admin extends CI_Model{
 	public function cekUsername($username){
 		
 		$this->db->select('username');
-		$result = $this->db->get_where('tbl_admin', array('username'=>$this->db->escape($username)), 1);
+		$result = $this->db->get_where('tbl_admin', array('username'=>$username), 1);
 		
 		if ($row = $result->row_array()) {
 			return $row['username'];
@@ -171,14 +172,14 @@ class Admin extends CI_Model{
 			// if password OK
 			if ((crypt($this->password, $adminData['password'])) === $adminData['password']) {
 				$data = array('sessionType'=>$adminData['privilege'], 'sessionEmail'=>$adminData['email'],
-								'sdminName'=>$adminData['fullname'], 'id'=>$adminData['idAdmin']);
+								'adminName'=>$adminData['fullname'], 'id'=>$adminData['idAdmin']);
 				
 				$this->session->set_userdata($data);
 					
 				if ($updateRecord) {
 					$this->lastLogin = date("Y-m-d H:i:s");
 					$this->lastIp = $_SERVER['REMOTE_ADDR'];
-					$this->db->update('tbl_admin', array('lastLogin'=>$this->db->escape($this->lastLogin), 'lastIp'=>$this->db->escape($this->lastIp)), array('idAdmin'=>$adminData['idAdmin']));
+					$this->db->update('tbl_admin', array('lastLogin'=>$this->lastLogin, 'lastIp'=>$this->lastIp), array('idAdmin'=>$adminData['idAdmin']));
 				}
 				return null;
 			}
@@ -194,7 +195,7 @@ class Admin extends CI_Model{
 		unset($_SESSION['id']);
 		unset($_SESSION['sessionType']);
 		unset($_SESSION['sessionEmail']);
-		unset($_SESSION['sdminName']);
+		unset($_SESSION['adminName']);
 	}
 }
 ?>

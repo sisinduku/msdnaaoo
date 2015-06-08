@@ -3,7 +3,7 @@
 		<h2>Pendaftaran MSDNAA</h2>
 		<hr>
 		<div class="col-md-6">
-			<form class="form-daftar" method="POST" action="<?php site_url("control_pendaftaran/daftar_mahasiswa");?>" role="form" enctype="multipart/form-data">
+			<form class="form-daftar" method="POST" action="<?php echo site_url("control_pendaftaran/daftar_mahasiswa");?>" role="form" enctype="multipart/form-data">
 				<label for="nim">NIM</label> 
 					<input type="text" name="nim" value="<?php echo set_value('nim')?>" class="form-control" placeholder="Masukan NIM" required autofocus /> 
 				<label for="nama">Nama</label>
@@ -26,20 +26,20 @@
 				<button class="btn btn-lg btn-primary btn-block" type="submit"
 					name="submit" style="width: 120px; background-color: #6E3439;">Daftar</button>
 				<br>
-				<?php
-				if (! empty ( validation_errors() ) && ! empty( $error)) {
+			</form>
+			<?php
+				if (! empty ( validation_errors() ) || ! empty( $error)) {
 					echo "<div class= \"alert alert-danger\"><ol type='1'>";
-						echo validation_errors('<li>', '</li>');
-						echo $error;
+						if(! empty ( validation_errors() )) echo validation_errors('<li>', '</li>');
+						if(! empty( $error)) echo $error;
 					echo "</ol></div>";
 				}
 				if (! empty ( $submitSukses )) {
 					echo "<div class= \"alert alert-success\"><ol type='1'>";
-						echo "<li>$suksesItem</li>\n";
+						echo "<li>".$submitSukses."</li>\n";
 					echo "</ol></div>";
 				}
-				?>
-			</form>
+			?>
 		</div>
 
 		<div class="col-md-6">
