@@ -4,6 +4,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Control_autentikasi extends CI_Controller{
 	
 	public function index(){
+		if($this->load->cek_sesi(false)){
+			$this->output->set_header("Location: ".site_url("/control_administrasi"));
+			return;
+		}
 		if($this->input->get('url') !== null)
 			$data['location'] = htmlspecialchars($this->input->get('url'));
 		$data['useSimple'] = true;
@@ -28,5 +32,11 @@ class Control_autentikasi extends CI_Controller{
 				header("Location:".base_url($this->input->post('location')));
 		}
 		$this->load->template_admin("form_login", $data);
-	}	
+	}
+
+	public function logout(){
+		$this->load->model('admin');
+		$this->admin->adminLogout();
+		$this->output->set_header("Location: ".site_url("/control_autentikasi"));
+	}
 }

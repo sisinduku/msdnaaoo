@@ -88,15 +88,23 @@ class Mahasiswa extends CI_Model{
 	 * @param int $filter id dari jurusan
 	 * @return array:string,int
 	 */
-	public function countMahasiswa($filter = 1){
+	public function countMahasiswa($filter = 1, $byStatus = FALSE){
 		
-		if($filter == 1)
-			$query = "SELECT SUBSTR(`nim`,3,4) AS prodi, COUNT(`nim`) AS jumlah FROM tbl_mahasiswa GROUP BY SUBSTR(`nim`,3,4)";
-		else{
-			$this->load->mode('jurusan');
-			$kode = $this->jurusan->getJurusanbyId($filter);
-			$query = sprintf("SELECT SUBSTR(`nim`,3,4) AS prodi, COUNT(`nim`) AS jumlah FROM tbl_mahasiswa WHERE SUBSTR(`nim`,3,4) = %s GROUP BY SUBSTR(`nim`,3,4)", $kode['nimJurusan']);
+		if(! $byStatus){
+			if($filter == 1)
+				$query = "SELECT tbl_jurusan.namaJurusan, COUNT(`nim`) AS jumlah FROM tbl_mahasiswa, tbl_jurusan WHERE SUBSTR(`nim`,3,4) = tbl_jurusan.nimJurusan GROUP BY SUBSTR(`nim`,3,4)";
+			else{
+				$query = sprintf("SELECT tbl_jurusan.namaJurusan, COUNT(`nim`) AS jumlah FROM tbl_mahasiswa, tbl_jurusan WHERE SUBSTR(`nim`,3,4) = tbl_jurusan.nimJurusan AND tbl_jurusan.id = %s GROUP BY SUBSTR(`nim`,3,4)", $filter);
+			}
+		}else{
+			if($filter == 1)
+				$query = "SELECT tbl_jurusan.namaJurusan, COUNT(`nim`) AS jumlah FROM tbl_mahasiswa, tbl_jurusan WHERE SUBSTR(`nim`,3,4) = tbl_jurusan.nimJurusan AND tbl_mahasiswa.konfirmasi = 1 GROUP BY SUBSTR(`nim`,3,4)";
+			else{
+				$query = sprintf("SELECT tbl_jurusan.namaJurusan, COUNT(`nim`) AS jumlah FROM tbl_mahasiswa, tbl_jurusan WHERE SUBSTR(`nim`,3,4) = tbl_jurusan.nimJurusan AND tbl_mahasiswa.konfirmasi = 0 AND tbl_jurusan.id = %s GROUP BY SUBSTR(`nim`,3,4)", $filter);
+			}
 		}
+		
+		
 		$result = $this->db->query($query);
 	
 		$index = 0;
