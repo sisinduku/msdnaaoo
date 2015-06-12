@@ -24,10 +24,27 @@ class Control_administrasi extends CI_Controller{
 		$this->load->template_admin("dashboard", $data, true);
 	}
 	
-	public function lihat_mahasiswa(){
+	public function lihat_mahasiswa($status = "all"){
 		if(!$this->load->cek_sesi()) exit;
 		
-		$data['pageTitle'] = "Dashboard Administrator";
-		$data['activePage'] = "semua";
+		$this->load->model('mahasiswa');
+		$data['listMahasiswa'] = $this->mahasiswa->getListDataMahasiswa($this->session->sessionType, $status);
+		if($status == "all"){
+			$data['pageTitle'] = "Daftar Mahasiswa";
+			$data['activePage'] = "all";
+		}else if($status == "unconfirmed"){
+			$data['pageTitle'] = "Daftar Mahasiswa Belum Dikonfirmasi";
+			$data['activePage'] = "unconf";
+		}else if($status == "confirmed"){
+			$data['pageTitle'] = "Daftar Mahasiswa Sudah Dikonfirmasi";
+			$data['activePage'] = "conf";
+		}else if($status == "registered" && $this->session->sessionType == 1){
+			$data['pageTitle'] = "Daftar Mahasiswa Sudah Terdaftar";
+			$data['activePage'] = "reg";
+		}else{
+			$data['pageTitle'] = "Halaman tidak ditemukan";
+			$this->load->template_admin("tidak_ditemukan", $data, true);
+		}
+		$this->load->template_admin("lihat_mahasiswa", $data, true);
 	}
 }

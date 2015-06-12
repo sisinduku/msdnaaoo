@@ -7,7 +7,7 @@
  */
 class Mahasiswa extends CI_Model{
 
-	private $nim, $nama, $email, $linkKtm;
+	private $nim, $nama, $email, $linkKtm, $konfirmasi;
 	
 	public function __construct(){
 		// Call the CI_Model constructor
@@ -81,6 +81,45 @@ class Mahasiswa extends CI_Model{
 			$index++;
 		}
 		return $query_result;
+	}
+	
+	function getListDataMahasiswa($filter, $queryFilter = "all"){
+		$result = array();
+		$index = 0;
+		
+		if($queryFilter == "all"){
+			$listMahasiswa = $this->getDataMahasiswa($filter);
+		}else{
+			$listMahasiswa = $this->getDataMahasiswabyStatus($queryFilter, $filter);
+		}
+		
+		foreach ($listMahasiswa as $itemMahasiswa){
+			if ($itemMahasiswa['konfirmasi'] == 0)
+				$mahasiswaStatus = "<span class='glyphicon glyphicon-remove-circle'></span> Belum ada konfirmasi";
+			else if($itemMahasiswa['konfirmasi'] == 1 && $this->session->sessionType == 1){
+				$mahasiswaStatus = "<span class='glyphicon glyphicon-ok-check'></span> Sudah dikonfirmasi";
+				$mahasiswaStatus .= "<br><span class='glyphicon glyphicon-remove-circle'></span> Belum didaftarkan";
+			}else if ($itemMahasiswa['konfirmasi'] == 2)
+				$mahasiswaStatus = "<span class='glyphicon glyphicon-ok-check'></span> Sudah didaftarkan";
+			else 
+				$mahasiswaStatus = "<span class='glyphicon glyphicon-ok-check'></span> Sudah dikonfirmasi";
+			
+			$actionList = "<a href='".site_url('/control_administrasi/detil_mahasiswa/'.
+					$itemMahasiswa['nim'])."'><button type='button' class='btn btn-primary'><span class='glyphicon glyphicon-search' aria-hidden='true'></span> Detil</button></a> ";
+			if ($itemMahasiswa['konfirmasi'] != 2)
+				$actionList .= "<br><br><a href='#' onclick=\"return hapusMahasiswa(".$itemMahasiswa['nim'].");\"><button type='button' class='btn btn-danger'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Hapus</button></a>";
+			
+			$result[$index] = "<tr>\n";
+			$result[$index] .= "	<td>".$itemMahasiswa['nim']."</td>\n";
+			$result[$index] .= "	<td>".$itemMahasiswa['nama']."</td>\n";
+			$result[$index] .= "	<td>".$itemMahasiswa['email']."</td>\n";
+			$result[$index] .= "	<td>".$mahasiswaStatus."</td>\n";
+			$result[$index] .= "	<td>".$actionList."</td>\n";
+			$result[$index] .= "</tr>\n";
+			$index++;
+		}
+		
+		return $result;
 	}
 	
 	/**
