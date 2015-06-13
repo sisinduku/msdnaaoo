@@ -105,9 +105,9 @@ class Mahasiswa extends CI_Model{
 				$mahasiswaStatus = "<span class='glyphicon glyphicon-ok-check'></span> Sudah dikonfirmasi";
 			
 			$actionList = "<a href='".site_url('/control_administrasi/detil_mahasiswa/'.
-					$itemMahasiswa['nim'])."'><button type='button' class='btn btn-primary'><span class='glyphicon glyphicon-search' aria-hidden='true'></span> Detil</button></a> ";
+					$itemMahasiswa['nim'])."/".$queryFilter."'><button type='button' class='btn btn-primary'><span class='glyphicon glyphicon-search' aria-hidden='true'></span> Detil</button></a> ";
 			if ($itemMahasiswa['konfirmasi'] != 2)
-				$actionList .= "<br><br><a href='#' onclick=\"return hapusMahasiswa(".$itemMahasiswa['nim'].");\"><button type='button' class='btn btn-danger'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Hapus</button></a>";
+				$actionList .= "<br><br><a href='#' onclick=\"return hapus_mahasiswa(".$itemMahasiswa['nim'].");\"><button type='button' class='btn btn-danger'><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Hapus</button></a>";
 			
 			$result[$index] = "<tr>\n";
 			$result[$index] .= "	<td>".$itemMahasiswa['nim']."</td>\n";
@@ -196,8 +196,8 @@ class Mahasiswa extends CI_Model{
 	 * @param string $nim
 	 * @return string
 	 */
-	public function deleteMahasiswa($nim){
-		
+	public function deleteMahasiswa(){
+		$nim = $this->input->post('nim');
 		$this->db->delete('tbl_mahasiswa', array('nim'=>$nim, 'konfirmasi !='=>3));
 	
 		if($this->db->affected_rows() != 0){
@@ -226,8 +226,8 @@ class Mahasiswa extends CI_Model{
 	 * @param string $nim
 	 * @return string
 	 */
-	public function konfirmasiMahasiswa($nim) {
-	
+	public function konfirmasiMahasiswa() {
+		$nim = $this->input->post('nim');
 		$this->db->update('tbl_mahasiswa', array('konfirmasi'=>1), array('nim'=>$nim));
 	
 		if($this->db->affected_rows() != 0){
@@ -240,13 +240,13 @@ class Mahasiswa extends CI_Model{
 	 * @param string $nim
 	 * @return string
 	 */
-	public function daftarkanMahasiswa($nim = NULL){
-	
+	public function daftarkanMahasiswa(){
+		$nim = $this->input->post('nim');
 		$date = date('Y-m-d', strtotime('+1 year'));
 		$date = trim($date);
 	
 		//Update status konfirmasi
-		if($nim == NULL)
+		if($nim == "semua")
 			$this->db->update('tbl_mahasiswa', array('konfirmasi'=>2, 'expired'=>$date), "konfirmasi=1");
 		else
 			$this->db->update('tbl_mahasiswa', array('konfirmasi'=>2, 'expired'=>$date), array('konfirmasi'=>1, 'nim'=>$nim));

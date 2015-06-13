@@ -47,4 +47,51 @@ class Control_administrasi extends CI_Controller{
 		}
 		$this->load->template_admin("lihat_mahasiswa", $data, true);
 	}
+	
+	public function detil_mahasiswa($nim, $referer = "all"){
+		if(!$this->load->cek_sesi()) exit;
+		
+		$this->load->model('mahasiswa');
+		$data['mahasiswa'] = $this->mahasiswa->getMahasiswabyNim($nim);
+		$data['pageTitle'] = "Detil Mahasiswa";
+		$data['referer'] = $referer;
+		
+		$this->load->template_admin("detil_mahasiswa", $data, true);
+	}
+	
+	public function konfirmasi_mahasiswa(){
+		if(!$this->load->cek_sesi()) exit;
+		
+		$this->load->model('mahasiswa');
+		$return = $this->mahasiswa->konfirmasiMahasiswa();
+		return $return;
+	}
+	
+	public function daftarkan_mahasiswa(){
+		if(!$this->load->cek_sesi()) exit;
+		
+		$this->load->model('mahasiswa');
+		$return = $this->mahasiswa->daftarkanMahasiswa();
+		return $return;
+	}
+	
+	public function cetak_email(){
+		$email = RESOURCES."email.txt";
+		
+		header('Content-Type: application/octet-stream');
+		header('Content-Disposition: attachment; filename='.basename($email));
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
+		header('Content-Length: ' . filesize($email));
+		readfile($email);
+	}
+	
+	public function hapus_mahasiswa(){
+		if(!$this->load->cek_sesi()) exit;
+		
+		$this->load->model('mahasiswa');
+		$return = $this->mahasiswa->deleteMahasiswa();
+		return $return;
+	}
 }

@@ -1,12 +1,13 @@
 <div class="col-sm-3 col-md-2 sidebar">
 	<ul class="nav nav-sidebar">
 		<li id="dashboard"><a href="<?php echo site_url('control_administrasi/dashboard');?>">Beranda</a></li>
-		<li class="dropdown" id="all"><a href="<?php echo site_url('control_administrasi/lihat_mahasiswa');?>" data-toggle="dropdown" class="dropdown-toggle">Lihat Semua Mahasiswa <b class="caret"></b></a>
-			<ul class="dropdown-menu">
-				<li id="unconf"><a href="<?php echo site_url('control_administrasi/lihat_mahasiswa');?>">Beranda</a></li>
-			</ul>
-		</li>
-		<li><a href="#">Analytics</a></li>
+		<li id="all"><a href="<?php echo site_url('control_administrasi/lihat_mahasiswa');?>">Lihat Semua Mahasiswa</a></li>
+		<ul class="nav nav-sidebar">
+			<li id="unconf"><a href="<?php echo site_url('control_administrasi/lihat_mahasiswa/unconfirmed');?>">Lihat Mahasiswa Belum Terkonfirmasi</a></li>
+			<li id="conf"><a href="<?php echo site_url('control_administrasi/lihat_mahasiswa/confirmed');?>">Lihat Mahasiswa Terkonfirmasi</a></li>
+			<li id="reg"><a href="<?php echo site_url('control_administrasi/lihat_mahasiswa/registered');?>">Lihat Mahasiswa Terdaftar</a></li>
+		</ul>
+		<li><a href="#">Tambah Mahasiswa</a></li>
 		<li><a href="#">Export</a></li>
 	</ul>
 	<ul class="nav nav-sidebar">

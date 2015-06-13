@@ -1,6 +1,60 @@
 /**
  * JavaScript custom yang dibutuhkan dijadikan satu dalam file ini
  */
+function konfirmasi_mahasiswa(id) {
+	var ctn = confirm("Konfirmasi mahasiswa ini?");
+	if (!ctn) return false;
+	show_overlay("Sedang memproses...");
+	$.post(Globals.site_url+"/control_administrasi/konfirmasi_mahasiswa/",
+		{
+			nim: id
+		},
+		function(data,status){
+			if(data === "ok"){
+				location.reload(true);
+			}else{
+				alert(data);
+			}
+		});
+	return false;
+}
+
+function daftarkan_mahasiswa(id) {
+	if(typeof(id)==='undefined') id = "semua";
+	var ctn = confirm("Cetak Data Mahasiswa?");
+	if (!ctn) return false;
+	$.post(Globals.site_url+"/control_administrasi/daftarkan_mahasiswa/",
+		{
+			nim: id
+		},
+		function(data, status, xhr){
+			if(data === "ok"){
+				$("body").append("<iframe src='"+Globals.site_url+"/control_administrasi/daftarkan_mahasiswa/cetak_email' style='display: none;'></iframe>");
+			}else{
+				alert(data);
+			}
+		});
+	return false;
+}
+
+function hapus_mahasiswa(id) {
+	var ctn = confirm("Hapus mahasiswa ini?");
+	if (!ctn) return false;
+	show_overlay("Sedang memproses...");
+	$.post(Globals.site_url+"/control_administrasi/daftarkan_mahasiswa/hapus_mahasiswa",
+		{
+			nim: id
+		},
+		function(data,status){
+			if(data === "ok"){
+				location.reload(true);
+			}else{
+				alert(data);
+			}
+		});
+	return false;
+}
+
 $(document).ready(function(){
 	var activePage = Globals.activePage;
 	var spanNode = document.createElement("SPAN");

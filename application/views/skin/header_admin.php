@@ -27,11 +27,15 @@
 	
 </head>
 <body>
-	<?php if(empty($useSimple)){?>
+	<?php if(empty($useSimple)){
+		if (!isset($activePage)) $activePage = null;
+	?>
+	
 	<!--  Membuat variabel untuk menyimpan variabel-variabel php ke dalam JavaScript-->
 	<script>
 		var Globals = <?php echo json_encode(array(
-			'activePage' => $activePage	
+			'activePage' => $activePage,
+			'site_url' => site_url()
 		))?>;
 	</script>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
