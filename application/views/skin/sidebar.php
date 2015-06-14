@@ -5,21 +5,12 @@
 		<ul class="nav nav-sidebar">
 			<li id="unconf"><a href="<?php echo site_url('control_administrasi/lihat_mahasiswa/unconfirmed');?>">Lihat Mahasiswa Belum Terkonfirmasi</a></li>
 			<li id="conf"><a href="<?php echo site_url('control_administrasi/lihat_mahasiswa/confirmed');?>">Lihat Mahasiswa Terkonfirmasi</a></li>
+			<?php if($this->session->sessionType == 1){?>
 			<li id="reg"><a href="<?php echo site_url('control_administrasi/lihat_mahasiswa/registered');?>">Lihat Mahasiswa Terdaftar</a></li>
+			<?php }?>
 		</ul>
-		<li><a href="#">Tambah Mahasiswa</a></li>
-		<li><a href="#">Export</a></li>
-	</ul>
-	<ul class="nav nav-sidebar">
-		<li><a href="">Nav item</a></li>
-		<li><a href="">Nav item again</a></li>
-		<li><a href="">One more nav</a></li>
-		<li><a href="">Another nav item</a></li>
-		<li><a href="">More navigation</a></li>
-	</ul>
-	<ul class="nav nav-sidebar">
-		<li><a href="">Nav item again</a></li>
-		<li><a href="">One more nav</a></li>
-		<li><a href="">Another nav item</a></li>
+		<?php if($this->session->sessionType == 1){?>
+		<li id="reset"><a href="<?php echo site_url('control_autentikasi/reset_password');?>">Reset Password</a></li>
+		<?php }?>
 	</ul>
 </div>

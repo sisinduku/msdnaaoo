@@ -28,10 +28,11 @@
 				<br>
 			</form>
 			<?php
-				if (! empty ( validation_errors() ) || ! empty( $error)) {
+				if (! empty ( validation_errors() ) || ! empty( $error) || !empty($nimError)) {
 					echo "<div class= \"alert alert-danger\"><ol type='1'>";
 						if(! empty ( validation_errors() )) echo validation_errors('<li>', '</li>');
 						if(! empty( $error)) echo $error;
+						if(! empty( $nimError)) echo "<li>".$nimError."</li>";
 					echo "</ol></div>";
 				}
 				if (! empty ( $submitSukses )) {

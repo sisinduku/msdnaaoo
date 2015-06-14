@@ -45,6 +45,13 @@ class Admin extends CI_Model{
 		}else return "Username sudah terdaftar";
 	}
 	
+	public function getAdminJurusan(){
+		$result = $this->db->get_where('tbl_admin', array('idAdmin !=' => 1));
+		
+		$row = $result->result_array();
+		return $row;
+	} 
+	
 	/**
 	 * Fungsi untuk mendapatkan baris admin berdasarkan idnya
 	 * @param int $idAdmin
@@ -78,11 +85,12 @@ class Admin extends CI_Model{
 	public function changePassword() {
 		
 		$this->idAdmin = $this->input->post('idAdmin');
+		$this->idAdmin = $this->encryption->decrypt($this->idAdmin);
 		$oldPassWord = $this->input->post('oldPassword');
 		$newPassWord = $this->input->post('newPassword');
 		
 		$adminData = $this->getAdminbyId($this->idAdmin);
-		if ($adminData == null) return "Admin ID not found!";
+		if ($adminData == null) return "Admin tidak ditemukan";
 	
 		// if password OK
 		if ((crypt($oldPassWord, $adminData['password'])) === $adminData['password']) {
@@ -94,7 +102,7 @@ class Admin extends CI_Model{
 			
 			$this->db->update('tbl_admin', array('password'=>$passwordHash),array('idAdmin'=>$adminData['idAdmin']));
 			
-			if ($this->db->affected_rows() === 0) return ("Query failed!");
+			if ($this->db->affected_rows() === 0) return ("Query Gagal!");
 	
 		} else return "Password lama salah! Pastikan ditulis dengan benar.";
 		return null;
@@ -106,17 +114,19 @@ class Admin extends CI_Model{
 	 */
 	public function changeEmail(){
 		$this->idAdmin = $this->input->post('idAdmin');
+		$this->idAdmin = $this->encryption->decrypt($this->idAdmin);
 		$password = $this->input->post('password');
-		$email = $this->input->post('email');
+		$email = $this->input->post('newEmail');
 		
 		$adminData = $this->getAdminbyId($this->idAdmin);
-		if ($adminData == null) return "Admin ID not found!";
+		if ($adminData == null) return "Admin tidak ditemukan";
 		
 		// if password OK
 		if ((crypt($password, $adminData['password'])) === $adminData['password']) {
 			$this->db->update('tbl_admin', array('email'=>$email), array('idAdmin'=>$adminData['idAdmin']));
 			if ($this->db->affected_rows() === 0) return ("Query failed!");
 		}else return "Password tidak tepat.";
+		$this->session->set_userdata(array('sessionEmail' => $email));
 		return null;
 	}
 	
@@ -125,19 +135,17 @@ class Admin extends CI_Model{
 	 * @return string
 	 */
 	public function resetPassword(){
-		$username = $this->input->post('username');
+		$admin = $this->input->post('admin');
 		$newPassword = $this->input->post('newPassword');
-		
-		$adminData = getAdminbyUsername($username);
 		
 		$cost = 10;
 		$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
 		$salt = sprintf("$2a$%02d$", $cost) . $salt;
 		$passwordHash = crypt($newPassword, $salt);
 			
-		$this->db->update('tbl_admin', array('password'=>$passwordHash),array('idAdmin'=>$adminData['idAdmin']));
+		$this->db->update('tbl_admin', array('password'=>$passwordHash),array('idAdmin'=>$admin));
 			
-		if ($this->db->affected_rows() === 0) return ("Query failed!");
+		if ($this->db->affected_rows() === 0) return $this->db->error;
 	}
 	
 	/**

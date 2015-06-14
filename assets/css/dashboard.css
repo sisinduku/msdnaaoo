@@ -67,6 +67,10 @@ body {
 	padding-left: 50px;
 }
 
+.nav-sidebar>.nav-sidebar {
+	margin-bottom: 0px;
+}
+
 .nav-sidebar>.active>a, .nav-sidebar>.active>a:hover, .nav-sidebar>.active>a:focus
 	{
 	color: #fff;
