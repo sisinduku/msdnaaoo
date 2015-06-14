@@ -6,6 +6,7 @@
 		<label for="password">Password</label>
 		<input type="password" name="password" class="form-control" placeholder="Password" required /><br>
 		<button class="btn btn-lg btn-primary btn-block" type="submit">Login</button><br>
+		<a href="#">Lupa Password?</a>
 		<?php
 		if (!empty(validation_errors()) || !empty($errors)) {
 			echo "<div class= \"alert alert-danger\"><ol type='1'>";
