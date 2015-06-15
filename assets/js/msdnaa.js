@@ -4,7 +4,6 @@
 function konfirmasi_mahasiswa(id) {
 	var ctn = confirm("Konfirmasi mahasiswa ini?");
 	if (!ctn) return false;
-	show_overlay("Sedang memproses...");
 	$.post(Globals.site_url+"/control_administrasi/konfirmasi_mahasiswa/",
 		{
 			nim: id
@@ -29,7 +28,7 @@ function daftarkan_mahasiswa(id) {
 		},
 		function(data, status, xhr){
 			if(data === "ok"){
-				$("body").append("<iframe src='"+Globals.site_url+"/control_administrasi/daftarkan_mahasiswa/cetak_email' style='display: none;'></iframe>");
+				$("body").append("<iframe src='"+Globals.site_url+"/control_administrasi/cetak_email/' style='display: none;'></iframe>");
 			}else{
 				alert(data);
 			}
@@ -40,7 +39,6 @@ function daftarkan_mahasiswa(id) {
 function hapus_mahasiswa(id) {
 	var ctn = confirm("Hapus mahasiswa ini?");
 	if (!ctn) return false;
-	show_overlay("Sedang memproses...");
 	$.post(Globals.site_url+"/control_administrasi/daftarkan_mahasiswa/hapus_mahasiswa",
 		{
 			nim: id
@@ -56,36 +54,38 @@ function hapus_mahasiswa(id) {
 }
 
 $(document).ready(function(){
-	var activePage = Globals.activePage;
-	var spanNode = document.createElement("SPAN");
-	var spanText = document.createTextNode("(current)");
-	spanNode.className = "sr-only";
-	spanNode.appendChild(spanText);
-	
-	document.getElementById(activePage).className = "active";
-	document.getElementById(activePage).firstChild.appendChild(spanNode);
-	
-	$('#tableMahasiswa').DataTable({
-		language: {
-	        "search": "Cari:",
-	        "emptyTable":     "Tidak ada data pada tabel",
-	        "infoEmpty":      "Menampilkan 0 mahasiswa",
-	        "info":           "Menampilkan _START_ - _END_ dari _TOTAL_ mahasiswa",
-	        "infoFiltered":   "(Disortir dari _MAX_ total mahasiswa)",
-	        "lengthMenu":     "Menampilkan _MENU_ mahasiswa",
-	        "loadingRecords": "Memuat...",
-	        "processing":     "Memproses...",
-	        "zeroRecords":    "Pencarian tidak ditemukan",
-	        "paginate": {
-	            "first":      "Pertama",
-	            "last":       "Terakhir",
-	            "next":       "Selanjutnya",
-	            "previous":   "Sebelumnya"
-	        },
-	        "aria": {
-	            "sortAscending":  ": Mensortir kolom secara ascending",
-	            "sortDescending": ": Mensortir kolom secara descending"
-	        }
-		}
-	});
+	if(Globals.activePage != null){
+		var activePage = Globals.activePage;
+		var spanNode = document.createElement("SPAN");
+		var spanText = document.createTextNode("(current)");
+		spanNode.className = "sr-only";
+		spanNode.appendChild(spanText);
+		
+		document.getElementById(activePage).className = "active";
+		document.getElementById(activePage).firstChild.appendChild(spanNode);
+		
+		$('#tableMahasiswa').DataTable({
+			language: {
+				"search": "Cari:",
+				"emptyTable":     "Tidak ada data pada tabel",
+				"infoEmpty":      "Menampilkan 0 mahasiswa",
+				"info":           "Menampilkan _START_ - _END_ dari _TOTAL_ mahasiswa",
+				"infoFiltered":   "(Disortir dari _MAX_ total mahasiswa)",
+				"lengthMenu":     "Menampilkan _MENU_ mahasiswa",
+				"loadingRecords": "Memuat...",
+				"processing":     "Memproses...",
+				"zeroRecords":    "Pencarian tidak ditemukan",
+				"paginate": {
+					"first":      "Pertama",
+					"last":       "Terakhir",
+					"next":       "Selanjutnya",
+					"previous":   "Sebelumnya"
+				},
+				"aria": {
+					"sortAscending":  ": Mensortir kolom secara ascending",
+					"sortDescending": ": Mensortir kolom secara descending"
+				}
+			}
+		});
+	}
 });

@@ -31,7 +31,7 @@
 						<?php if ($mahasiswa['konfirmasi'] == 0){?>
 							<a href="#" class = "btn btn-success" onclick="konfirmasi_mahasiswa('<?php echo $mahasiswa['nim'];?>')">Konfirm</a>
 						<?php }elseif ($mahasiswa['konfirmasi'] == 1 && $this->session->sessionType == 1){?>
-							<a href="" class = "btn btn-success" onclick="daftarkan_mahasiswa('<?php echo $mahasiswa['nim'];?>')">Daftarkan</a>
+							<a href="#" class = "btn btn-success" onclick="daftarkan_mahasiswa('<?php echo $mahasiswa['nim'];?>')">Daftarkan</a>
 						<?php } else if($mahasiswa['konfirmasi'] == 1){?>
 							<div class="alert alert-success" role="alert">Mahasiswa Sudah Dikonfirmasi</div>
 						<?php } else {?>

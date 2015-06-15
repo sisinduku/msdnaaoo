@@ -64,19 +64,20 @@ class Control_administrasi extends CI_Controller{
 		
 		$this->load->model('mahasiswa');
 		$return = $this->mahasiswa->konfirmasiMahasiswa();
-		return $return;
+		echo $return;
 	}
 	
 	public function daftarkan_mahasiswa(){
 		if(!$this->load->cek_sesi()) exit;
+		if($this->session->sessionType != 1) exit;
 		
 		$this->load->model('mahasiswa');
 		$return = $this->mahasiswa->daftarkanMahasiswa();
-		return $return;
+		echo $return;
 	}
 	
-	public function cetak_email(){
-		$email = RESOURCES."email.txt";
+	public function cetak_email($nim){
+		$email = base_url('/assets/resources/email.txt');
 		
 		header('Content-Type: application/octet-stream');
 		header('Content-Disposition: attachment; filename='.basename($email));
@@ -92,6 +93,6 @@ class Control_administrasi extends CI_Controller{
 		
 		$this->load->model('mahasiswa');
 		$return = $this->mahasiswa->deleteMahasiswa();
-		return $return;
+		echo $return;
 	}
 }

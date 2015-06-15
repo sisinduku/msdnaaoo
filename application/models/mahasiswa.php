@@ -252,6 +252,20 @@ class Mahasiswa extends CI_Model{
 			$this->db->update('tbl_mahasiswa', array('konfirmasi'=>2, 'expired'=>$date), array('konfirmasi'=>1, 'nim'=>$nim));
 	
 		if($this->db->affected_rows() != 0){
+			if($nim != "semua"){
+				$mahasiswa = $this->getMahasiswabyNim($nim);
+				$mystring = $mahasiswa['email'];
+			}else{
+				$mahasiswa = $this->getDataMahasiswabyStatus("confirmed", 1);
+				$mahasiswaRow = array();
+				foreach($mahasiswa as $row){
+					$mahasiswaRow[] = $row['email'];
+				}
+				$mystring = implode("\n", $mahasiswaRow);
+			}
+			$this->load->helper('file');
+			$email = './assets/resources/email.txt';
+			write_file($email, $mystring);
 			return "ok";
 		}else if($this->db->error){
 			return $this->db->error;
