@@ -10,7 +10,7 @@
 			<?php }?>
 		</ul>
 		<?php if($this->session->sessionType == 1){?>
-		<li id="reset"><a href="#" onclick="daftarkan_mahasiswa()">Reset Password</a></li>
+		<li id="reset"><a href="#" onclick="daftarkan_mahasiswa()">Daftarkan Semua Mahasiswa</a></li>
 		<?php }?>
 		<?php if($this->session->sessionType == 1){?>
 		<li id="reset"><a href="<?php echo site_url('control_autentikasi/reset_password');?>">Reset Password</a></li>

@@ -29,6 +29,9 @@ function daftarkan_mahasiswa(id) {
 		function(data, status, xhr){
 			if(data === "ok"){
 				$("body").append("<iframe src='"+Globals.site_url+"/control_administrasi/cetak_email/' style='display: none;'></iframe>");
+				setTimeout(function(){
+					location.reload(true);
+				}, 2000);
 			}else{
 				alert(data);
 			}
@@ -39,7 +42,7 @@ function daftarkan_mahasiswa(id) {
 function hapus_mahasiswa(id) {
 	var ctn = confirm("Hapus mahasiswa ini?");
 	if (!ctn) return false;
-	$.post(Globals.site_url+"/control_administrasi/daftarkan_mahasiswa/hapus_mahasiswa",
+	$.post(Globals.site_url+"/control_administrasi/hapus_mahasiswa",
 		{
 			nim: id
 		},

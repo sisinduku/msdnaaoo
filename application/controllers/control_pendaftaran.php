@@ -18,9 +18,18 @@ class Control_pendaftaran extends CI_Controller{
 			if (substr($nim, 0, 2) != "24")
 				$data['nimError'] = "NIM pendaftar harus berasal dari FSM.";
 			
-			$this->load->library('upload');
+			$config['upload_path'] = FCPATH."/assets/uploads/";
+			$config['allowed_types'] = 'gif|jpg|jpeg|png';
+			$config['max_size'] = '2048';
+			$config['overwrite'] = 'TRUE';
+			$config['file_name'] = $nim;
+			
+			$this->load->library('upload', $config);
+			$this->upload->initialize($config);
+			
 			if(! $this->upload->do_upload('ktm') || $this->form_validation->run() == FALSE || isset($data['nimError'])){
-				if (! empty($this->upload->display_errors()))
+				$error = $this->upload->display_errors();
+				if (! empty($error))
 					$data['error'] = $this->upload->display_errors('<li>', '</li>');
 				$data['pageTitle'] = "Form Pendafraran MSDNAA FSM";
 				$this->load->template("form_pendaftaran", $data);

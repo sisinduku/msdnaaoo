@@ -59,13 +59,13 @@ class Mahasiswa extends CI_Model{
 				$this->db->where('konfirmasi', 2);
 			}
 		}else{
+			$this->load->model('jurusan');
+			$kode = $this->jurusan->getJurusanbyId($filter);
 			if ($queryFilter == "confirmed") {
 				$this->db->where('konfirmasi',1);
 			} else if ($queryFilter == "unconfirmed") {
 				$this->db->where('konfirmasi', 0);
 			}
-			
-			$kode = $this->jurusan->getJurusanbyId($filter);
 			$where = "SUBSTR(`nim`,3,4) = ".$kode['nimJurusan'];
 			$this->db->where($where);
 			
@@ -97,12 +97,12 @@ class Mahasiswa extends CI_Model{
 			if ($itemMahasiswa['konfirmasi'] == 0)
 				$mahasiswaStatus = "<span class='glyphicon glyphicon-remove-circle'></span> Belum ada konfirmasi";
 			else if($itemMahasiswa['konfirmasi'] == 1 && $this->session->sessionType == 1){
-				$mahasiswaStatus = "<span class='glyphicon glyphicon-ok-check'></span> Sudah dikonfirmasi";
+				$mahasiswaStatus = "<span class='glyphicon glyphicon-ok-circle'></span> Sudah dikonfirmasi";
 				$mahasiswaStatus .= "<br><span class='glyphicon glyphicon-remove-circle'></span> Belum didaftarkan";
 			}else if ($itemMahasiswa['konfirmasi'] == 2)
-				$mahasiswaStatus = "<span class='glyphicon glyphicon-ok-check'></span> Sudah didaftarkan";
+				$mahasiswaStatus = "<span class='glyphicon glyphicon-ok-circle'></span> Sudah didaftarkan";
 			else 
-				$mahasiswaStatus = "<span class='glyphicon glyphicon-ok-check'></span> Sudah dikonfirmasi";
+				$mahasiswaStatus = "<span class='glyphicon glyphicon-ok-circle'></span> Sudah dikonfirmasi";
 			
 			$actionList = "<a href='".site_url('/control_administrasi/detil_mahasiswa/'.
 					$itemMahasiswa['nim'])."/".$queryFilter."'><button type='button' class='btn btn-primary'><span class='glyphicon glyphicon-search' aria-hidden='true'></span> Detil</button></a> ";
@@ -245,31 +245,31 @@ class Mahasiswa extends CI_Model{
 		$date = date('Y-m-d', strtotime('+1 year'));
 		$date = trim($date);
 	
+		if($nim != "semua"){
+			$mahasiswa = $this->getMahasiswabyNim($nim);
+			$mystring = $mahasiswa['email'];
+		}else{
+			$mahasiswa = $this->getDataMahasiswabyStatus("confirmed", 1);
+			$mahasiswaRow = array();
+			$index = 0;
+			foreach($mahasiswa as $row){
+				$mahasiswaRow[$index] = $row['email'];
+				$index++;
+			}
+			$mystring = implode("\n", $mahasiswaRow);
+		}
+		$email = FCPATH.'/assets/resources/email.txt';
+		file_put_contents($email, $mystring);
+		
 		//Update status konfirmasi
 		if($nim == "semua")
 			$this->db->update('tbl_mahasiswa', array('konfirmasi'=>2, 'expired'=>$date), "konfirmasi=1");
 		else
 			$this->db->update('tbl_mahasiswa', array('konfirmasi'=>2, 'expired'=>$date), array('konfirmasi'=>1, 'nim'=>$nim));
-	
+		
 		if($this->db->affected_rows() != 0){
-			if($nim != "semua"){
-				$mahasiswa = $this->getMahasiswabyNim($nim);
-				$mystring = $mahasiswa['email'];
-			}else{
-				$mahasiswa = $this->getDataMahasiswabyStatus("confirmed", 1);
-				$mahasiswaRow = array();
-				foreach($mahasiswa as $row){
-					$mahasiswaRow[] = $row['email'];
-				}
-				$mystring = implode("\n", $mahasiswaRow);
-			}
-			$this->load->helper('file');
-			$email = './assets/resources/email.txt';
-			write_file($email, $mystring);
 			return "ok";
-		}else if($this->db->error){
-			return $this->db->error;
-		}
+		}else return $this->db->error;
 	}
 }
 ?>

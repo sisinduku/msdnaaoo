@@ -49,7 +49,7 @@ class Jurusan extends CI_Model{
 	 */
 	public function getJurusanbyName($namaJurusan){
 		
-		$result = $this->db->get_where('tbl_jurusan', array('namaJurusan'=>$this->db->escape($this->namaJurusan)), 1);
+		$result = $this->db->get_where('tbl_jurusan', array('namaJurusan'=>$namaJurusan), 1);
 		return $result->row_array();
 	}
 	
@@ -59,7 +59,7 @@ class Jurusan extends CI_Model{
 	 * @return array:Jurusan
 	 */
 	public function getJurusanbyId($id){
-		$result = $this->db->get_where('tbl_jurusan', array('id'=>$this->id), 1);
+		$result = $this->db->get_where('tbl_jurusan', array('id'=>$id), 1);
 		return $result->row_array();
 	}
 }

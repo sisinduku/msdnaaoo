@@ -17,10 +17,9 @@ $config = array(
 				array(
 						'field' => 'nama',
 						'label' => 'Nama',
-						'rules' => 'trim|required|valid_base64',
+						'rules' => 'trim|required',
 						'errors' => array(
-								'required' => "Tolong isikan %s anda.",
-								'valid_base64' => "Karakter pada %s Anda tidak valid."
+								'required' => "Tolong isikan %s anda."
 						)
 				),
 				array(

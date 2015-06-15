@@ -5,11 +5,11 @@
 		<div class="col-md-6">
 			<form class="form-daftar" method="POST" action="<?php echo site_url("control_pendaftaran/daftar_mahasiswa");?>" role="form" enctype="multipart/form-data">
 				<label for="nim">NIM</label> 
-					<input type="text" name="nim" value="<?php echo set_value('nim')?>" class="form-control" placeholder="Masukan NIM" required autofocus /> 
+					<input type="text" name="nim" value="<?php if (empty ( $submitSukses )) echo set_value('nim')?>" class="form-control" placeholder="Masukan NIM" required autofocus /> 
 				<label for="nama">Nama</label>
-					<input type="text" name="nama" value="<?php echo set_value('nama')?>" class="form-control" placeholder="Masukkan Nama" required /> 
+					<input type="text" name="nama" value="<?php if (empty ( $submitSukses )) echo set_value('nama')?>" class="form-control" placeholder="Masukkan Nama" required /> 
 				<label for="email">Email</label> 
-				<input type="email" name="email" value="<?php echo set_value('email')?>" class="form-control" placeholder="Email" required /><br>
+				<input type="email" name="email" value="<?php if (empty ( $submitSukses )) echo set_value('email')?>" class="form-control" placeholder="Email" required /><br>
 				<div class="fileinput fileinput-new" data-provides="fileinput">
 					<div class="fileinput-preview thumbnail" data-trigger="fileinput"
 						style="width: 200px; height: 150px;">

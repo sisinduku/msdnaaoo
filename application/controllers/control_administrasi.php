@@ -77,15 +77,8 @@ class Control_administrasi extends CI_Controller{
 	}
 	
 	public function cetak_email($nim){
-		$email = base_url('/assets/resources/email.txt');
-		
-		header('Content-Type: application/octet-stream');
-		header('Content-Disposition: attachment; filename='.basename($email));
-		header('Expires: 0');
-		header('Cache-Control: must-revalidate');
-		header('Pragma: public');
-		header('Content-Length: ' . filesize($email));
-		readfile($email);
+		$this->load->helper('download');
+		force_download(FCPATH.'/assets/resources/email.txt',NULL);
 	}
 	
 	public function hapus_mahasiswa(){
