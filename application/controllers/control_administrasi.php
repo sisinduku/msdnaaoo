@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Control_administrasi extends CI_Controller{
+class control_administrasi extends CI_Controller{
 	
 	public function index(){
 		if(!$this->load->cek_sesi()) exit;
@@ -38,7 +38,7 @@ class Control_administrasi extends CI_Controller{
 		}else if($status == "confirmed"){
 			$data['pageTitle'] = "Daftar Mahasiswa Sudah Dikonfirmasi";
 			$data['activePage'] = "conf";
-		}else if($status == "registered" && $this->session->sessionType == 1){
+		}else if($status == "registered"){
 			$data['pageTitle'] = "Daftar Mahasiswa Sudah Terdaftar";
 			$data['activePage'] = "reg";
 		}else{

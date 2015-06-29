@@ -4,7 +4,7 @@
  * @author Soliloquy
  *
  */
-class Jurusan extends CI_Model{
+class jurusan extends CI_Model{
 	
 	private $id, $namaJurusan, $nimJurusan;
 	

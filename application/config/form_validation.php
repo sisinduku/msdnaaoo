@@ -17,9 +17,10 @@ $config = array(
 				array(
 						'field' => 'nama',
 						'label' => 'Nama',
-						'rules' => 'trim|required',
+						'rules' => 'trim|required|alpha_numeric_spaces',
 						'errors' => array(
-								'required' => "Tolong isikan %s anda."
+								'required' => "Tolong isikan %s anda.",
+								'alpha_numeric_spaces' => "%s hanya diizinkan berupa alphanumerik."
 						)
 				),
 				array(
@@ -59,7 +60,7 @@ $config = array(
 						'rules' => 'required|matches[newPasswordConf]',
 						'errors' => array(
 								'required' => "Tolong isikan %s Anda.",
-								'matches' => "%s dan %s harus sesuai."
+								'matches' => "%s dan Konfirmasi Password harus sesuai."
 						)
 				),
 				array(
@@ -79,10 +80,11 @@ $config = array(
 				array(
 						'field' => 'newEmail',
 						'label' => 'Email Baru',
-						'rules' => 'trim|required|matches[newEmailConf]|valid_email',
+						'rules' => 'trim|required|matches[newEmailConf]|valid_email|is_unique[tbl_admin.email]',
 						'errors' => array(
 								'required' => "Tolong isikan %s Anda.",
-								'matches' => "%s dan %s harus sesuai.",
+								'matches' => "%s dan Konfirmasi Email harus sesuai.",
+								'is_unique' => "Maaf, %s Sudah terdaftar.",
 								'valid_email' => "%s Anda tidak valid."
 						)
 				),
@@ -103,7 +105,35 @@ $config = array(
 						'rules' => 'trim|required|matches[newPasswordConf]',
 						'errors' => array(
 								'required' => "Tolong isikan %s Anda.",
-								'matches' => "%s dan %s harus sesuai."
+								'matches' => "%s dan Konfirmasi Password harus sesuai."
+						)
+				),
+				array(
+						'field' => 'newPasswordConf',
+						'label' => 'Konfirmasi Password Baru',
+						'rules' => 'trim|required',
+						'errors' => array('required' => "Tolong isikan %s Anda.")
+				)
+		),
+		'control_autentikasi/request_lupa_password' => array(
+				array(
+						'field' => 'email',
+						'label' => 'Email',
+						'rules' => 'trim|required|valid_email',
+						'errors' => array(
+								'required' => "Tolong isikan %s Anda.",
+								'valid_email' => "%s Anda tidak  valid."
+						)
+				)
+		),
+		'control_autentikasi/lupa_password' => array(
+				array(
+						'field' => 'newPassword',
+						'label' => 'Password Baru',
+						'rules' => 'trim|required|matches[newPasswordConf]',
+						'errors' => array(
+								'required' => "Tolong isikan %s Anda.",
+								'matches' => "%s dan Konfirmasi Password harus sesuai."
 						)
 				),
 				array(

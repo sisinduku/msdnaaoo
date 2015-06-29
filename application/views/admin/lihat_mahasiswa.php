@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-			<h1 class="page-header">Daftar Semua Mahasiswa</h1>
+			<h1 class="page-header"><?php echo $pageTitle;?></h1>
 
 			<div class="row">
 				<div class="col-lg-12">
@@ -17,7 +17,7 @@
 											<th>Nama</th>
 											<th>Email</th>
 											<th>Status</th>
-											<th>Action</th>
+											<th>Aksi</th>
 										</tr>
 									</thead>
 									<tbody>

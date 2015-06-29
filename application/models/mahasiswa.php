@@ -5,7 +5,7 @@
  * @author Saptanto Sindu K U
  *
  */
-class Mahasiswa extends CI_Model{
+class mahasiswa extends CI_Model{
 
 	private $nim, $nama, $email, $linkKtm, $konfirmasi;
 	
@@ -65,6 +65,8 @@ class Mahasiswa extends CI_Model{
 				$this->db->where('konfirmasi',1);
 			} else if ($queryFilter == "unconfirmed") {
 				$this->db->where('konfirmasi', 0);
+			} else if ($queryFilter == "registered") {
+				$this->db->where('konfirmasi', 2);
 			}
 			$where = "SUBSTR(`nim`,3,4) = ".$kode['nimJurusan'];
 			$this->db->where($where);

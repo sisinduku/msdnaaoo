@@ -5,7 +5,7 @@
  * @author Saptanto Sindu K U
  *
  */
-class Admin extends CI_Model{
+class admin extends CI_Model{
 		
 	private $idAdmin, $username, $password, $email, $fullname, $lastLogin, $lastIp, $privilege;
 	
@@ -66,6 +66,19 @@ class Admin extends CI_Model{
 	}
 	
 	/**
+	 * Fungsi untuk mendapatkan baris admin berdasarkan emailnya
+	 * @param string $email
+	 * @return row Admin
+	 */
+	public function getAdminbyEmail($email) {
+	
+		$result = $this->db->get_where('tbl_admin', array('email'=>$email), 1);
+	
+		$row = $result->row();
+		return $row;
+	}
+	
+	/**
 	 * Fungsi untuk mendapatkan baris admin berdasarkan usernamenya
 	 * @param string $username
 	 * @return row of array Admin
@@ -76,6 +89,20 @@ class Admin extends CI_Model{
 	
 		$row = $result->row_array();
 		return $row;
+	}
+	
+	function set_hashed_password($userName, $newPassWord){
+		// == Generate hash untuk password baru
+		$cost = 10;
+		$salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
+		$salt = sprintf("$2a$%02d$", $cost) . $salt;
+		$passwordHash = crypt($newPassWord, $salt);
+	
+		$this->db->where('username',$userName);
+		$qResult = $this->db->update('tbl_admin', array('password' => $passwordHash));
+	
+		if ($this->db->affected_rows() == 0) return ("No affected rows.");
+		return null;
 	}
 	
 	/**
@@ -160,6 +187,21 @@ class Admin extends CI_Model{
 		
 		if ($row = $result->row_array()) {
 			return $row['username'];
+		}
+		return 0;
+	}
+	
+	/**
+	 * Fungsi untuk memeriksa email sudah ada atau belum
+	 * @return string|number
+	 */
+	public function cekEmail(){
+		$email = $this->input->post('email');
+		$this->db->select('email');
+		$result = $this->db->get_where('tbl_admin', array('email'=>$email), 1);
+	
+		if ($row = $result->row_array()) {
+			return $row['email'];
 		}
 		return 0;
 	}

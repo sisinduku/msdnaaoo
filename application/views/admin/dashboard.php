@@ -27,7 +27,7 @@
 			if ($jenisAdmin == "super"){
 				echo '<h3 align="left">Mahasiswa Terkonfirmasi</h3>';
 			}else {
-				echo '<h3 align="left">Mahasiswa Terdaftar</h3>';
+				echo '<h3 align="left">Mahasiswa Pending</h3>';
 			}	
 			?>
 			<?php 
