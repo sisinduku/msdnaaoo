@@ -115,17 +115,17 @@ class control_autentikasi extends CI_Controller{
 					
 				if (!$berhasil) {
 					$reportToLog .= "Mailer Error!";
+					$data['submitErrors'] = "Maaf, gagal mengirim email";
 				} else {
 					$reportToLog .= "Message sent...";
+					$dateChunk = date("Ymd-His");
+					$reportToLog .= "\t[MSDNAA FSM] | [".$dateChunk.".html]";
+						
+					file_put_contents(APPPATH."/logs/email.log", $reportToLog, FILE_APPEND);
+					file_put_contents(APPPATH."/logs/emails/".$dateChunk.".html", $kontenEmail);
+						
+					$data['submitSukses'] = "Password anda berhasil di-reset. <br>Silahkan periksa email Anda untuk melakukan tahap berikutnya";
 				}
-					
-				$dateChunk = date("Ymd-His");
-				$reportToLog .= "\t[MSDNAA FSM] | [".$dateChunk.".html]";
-					
-				file_put_contents(APPPATH."/logs/email.log", $reportToLog, FILE_APPEND);
-				file_put_contents(APPPATH."/logs/emails/".$dateChunk.".html", $kontenEmail);
-					
-				$data['submitSukses'] = "Password anda berhasil di-reset. <br>Silahkan periksa email Anda untuk melakukan tahap berikutnya";
 			}else{
 				$data['submitErrors'] = "Maaf, email anda tidak ditemukan";
 			}
@@ -141,7 +141,7 @@ class control_autentikasi extends CI_Controller{
 		$sekarang = $now->format ( 'Y-m-d H:i:s' );
 		if ($requestKey != null) {
 			$this->load->model("reset_password");
-			$dataRequest = $this->reset_password->get_request_key($requestKey);
+			$dataRequest = $this->reset_password->getRequestKey($requestKey);
 			if ($dataRequest != null) {
 				if (($dataRequest->expiredRequest >= $sekarang) && ($dataRequest->statusRequest == 1)) {
 					if (isset($_POST['submit'])) {
@@ -151,10 +151,10 @@ class control_autentikasi extends CI_Controller{
 						
 						}else {
 							$this->load->model("admin");
-							$username = $this->admin->getAdminbyEmail($dataRequest->email);	
-							$queryResult = $this->admin->set_hashed_password("administrator", $passBaru1);
+							$admin = $this->admin->getAdminbyId($dataRequest->idAdmin);	
+							$queryResult = $this->admin->set_hashed_password($admin['username'], $passBaru1);
 							if ($queryResult == null) {
-								$this->reset_password->deactivate_key($requestKey);
+								$this->reset_password->deactivateKey($requestKey);
 								$data['submitSukses'] = "<span class=\"fa fa-check\"></span> Kata sandi berhasil direset.";
 								$data['hideForm'] = true;
 							} else {

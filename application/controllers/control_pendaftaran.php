@@ -48,4 +48,22 @@ class control_pendaftaran extends CI_Controller{
 			$this->load->template("form_pendaftaran", $data);
 		}	
 	}
+	
+	public function tes(){
+		$this->load->model('mahasiswa');
+		
+		$mahasiswa = $this->mahasiswa->getDataMahasiswa(1);
+		
+		foreach($mahasiswa as $row){
+			if(file_exists(FCPATH."/assets/uploads/".$row['nim'].".png")){
+				$ekstensi = ".png";
+			}else if(file_exists(FCPATH."/assets/uploads/".$row['nim'].".jpeg")){
+				$ekstensi = ".jpeg";
+			}else{
+				$ekstensi = ".jpg";
+			}
+			$linkBaru = "/assets/uploads/".$row['nim'].$ekstensi;
+			$this->db->update('tbl_mahasiswa', array('linkKtm'=>$linkBaru), array('nim'=>$row['nim']));
+		}
+	}
 }

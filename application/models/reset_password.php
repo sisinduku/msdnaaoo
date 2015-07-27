@@ -1,14 +1,14 @@
 <?php
 class reset_password extends CI_Model {
-	private $idRequest, $email, $requestKey, $tanggalRequest, $expiredRequest, $statusRequest;
+	private $idRequest, $idAdmin, $requestKey, $tanggalRequest, $expiredRequest, $statusRequest;
 	
 	public function sendRequestKey($tujuanEmail) {
 		$this->load->model ( 'admin' );
 		
-		
+		$admin = $this->admin->getAdminbyEmail($tujuanEmail);
 
-		$this->email = $tujuanEmail;
-		$rand = substr ( md5 ( $this->email ), rand ( 0, 26 ), 3 );
+		$this->idAdmin = $admin->idAdmin;
+		$rand = substr ( md5 ( $admin->email ), rand ( 0, 26 ), 3 );
 		$rand .= substr ( md5 ( microtime () ), rand ( 0, 26 ), 5 );
 		$this->requestKey = $rand;
 		$now = new DateTime ();
@@ -18,7 +18,7 @@ class reset_password extends CI_Model {
 		$this->statusRequest = 1;
 		
 		$data = array (
-				'email' => $this->email,
+				'idAdmin' => $this->idAdmin,
 				'requestKey' => $this->requestKey,
 				'tanggalRequest' => $this->tanggalRequest,
 				'expiredRequest' => $this->expiredRequest,
@@ -46,14 +46,14 @@ class reset_password extends CI_Model {
 		return $content;
 	}
 	
-	public function get_request_key($requestKey) {
+	public function getRequestKey($requestKey) {
 		$this->db->where("requestKey", $requestKey);
 		$result = $this->db->get("tbl_reset_password");
 		$row = $result->row();
 		return $row;
 	}
 	
-	public function deactivate_key($requestKey) {
+	public function deactivateKey($requestKey) {
 		$this->db->where("requestKey",$requestKey);
 		$result = $this->db->update("tbl_reset_password",array(
 				"statusRequest" => 0
