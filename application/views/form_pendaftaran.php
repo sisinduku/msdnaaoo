@@ -1,6 +1,6 @@
 <div class="container-page">
 	<div class="row">
-		<h2>Pendaftaran MSDNAA</h2>
+		<h2>Pendaftaran DreamSpark</h2>
 		<hr>
 		<div class="col-md-6">
 			<form class="form-daftar" method="POST" action="<?php echo site_url("control_pendaftaran/daftar_mahasiswa");?>" role="form" enctype="multipart/form-data">
@@ -44,15 +44,15 @@
 		</div>
 
 		<div class="col-md-6">
-			<h3>Selamat Datang di MSDNAA FSM Undip</h3>
+			<h3>Selamat Datang di DreamSpark FSM Undip</h3>
 			<p>Dengan mendaftarkan diri disini anda akan mendapatkan akun
 				DreamSpark.</p>
 			<p>Akun DreamSpark memberikan anda keuntungan yaitu berupa lisensi
 				software-software Windows yang ada pada website DreamSpark.</p>
 			<p>Pastikan himpunan jurusan anda mengkonfirmasi pendaftaran anda.</p>
-			<p>Terima Kasih atas partisipasinya di MSDNAA FSM Undip</p>
+			<p>Terima Kasih atas partisipasinya di DreamSpark FSM Undip</p>
 			<p>
-				<sup>&copy;UP2TI</sup>
+				&copy;UP2TI Powered By <a style="color: #fff" href="mailto:saptanto.sindu@gmail.com?Subject=DreamSpark%20FSM" target="_top">Ketampanan</a>
 			</p>
 		</div>
 	</div>

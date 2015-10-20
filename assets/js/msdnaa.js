@@ -48,6 +48,7 @@ function hapus_mahasiswa(id) {
 		},
 		function(data,status){
 			if(data === "ok"){
+				alert("Data berhasil dihapus.");
 				location.reload(true);
 			}else{
 				alert(data);

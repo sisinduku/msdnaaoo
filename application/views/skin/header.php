@@ -25,7 +25,7 @@
 	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
 	   <div class="container">
 		<div class="navbar-header">
-		   <a class="navbar-brand" href="">MSDNAA - UP2TI</a>
+		   <a class="navbar-brand" href="">DreamSpark - UP2TI</a>
 		</div>
 	   </div>
 	</div>	

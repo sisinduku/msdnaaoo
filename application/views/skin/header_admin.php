@@ -4,7 +4,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-<meta name="description" content="Dashboard MSDNAA FSM UNDIP">
+<meta name="description" content="DreamSpark FSM UNDIP">
 <meta name="author" content="Saptanto Sindu K U">
 <!-- <link rel="icon" href="../../favicon.ico">  -->
 
